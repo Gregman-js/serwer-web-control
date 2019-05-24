@@ -20,8 +20,10 @@ Plan a shutdown
 ## Instalation
 
 `composer install`
+
 `bower install`
+
 `php bin/console d:s:u -f`
 
 ### Go for it and have fun
-* Fork me *
+*Fork me*
