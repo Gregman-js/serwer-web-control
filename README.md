@@ -1,13 +1,19 @@
-base
+Serwer web control
 ====
 
 A Symfony project created on May 4, 2019, 10:34 pm.
 
-# serwer-web-control
+# Getting started
 Serwer web Control based on Symfony PHP, working on ssh layer
-You can add many serwers, create command and send it via ajax
-Read your machine status, temperature, fan speed, others
-Plan a shutdown
+You can:
+* Add many serwers in settings
+* Control your machine by your commands and send these via ajax
+* Read your machine status
+    * Cpu temperature and others
+    * fan speed
+    * Memory usage
+    * Uptime
+Plan a shutdown with clock feature
 
 ## Requirements
 * composer
@@ -17,6 +23,7 @@ Plan a shutdown
     * PHP
 * bower
 
+Full working status fetching require root access
 ## Instalation
 
 `composer install`
@@ -25,6 +32,8 @@ Plan a shutdown
 
 `php bin/console d:s:u -f`
 
+
 ### Go for it and have fun
 **Fork me**
+
 Version: 1.1
