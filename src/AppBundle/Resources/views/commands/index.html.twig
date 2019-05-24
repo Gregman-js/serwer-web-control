@@ -1,0 +1,46 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+
+{% block page_subtitle %}{% endblock %}
+{% block my_js %}
+  <script type="text/javascript" src="{{ asset('js/com/sendCom.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/com/basiccom.js') }}"></script>
+{% endblock %}
+{% block page_title %}{{ machine.name }}
+  <div class="" style="float:right;">
+    <a href="{{ path('add_com', {'id': machine.id}) }}" class="btn btn-primary">Add new command</a>
+  </div>
+{% endblock %}
+{% block page_content %}
+<div class="box">
+
+<div class="box-body">
+    <table id="example2" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Command</th>
+            <th>Quick Access</th>
+            <th>Is remote</th>
+            <th>Show output</th>
+            <th>Opcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for command in commands %}
+        <tr>
+            <td>{{ command.name }}</td>
+            <td>{{ command.command }}</td>
+            <td><a href="{{ path('en_com',{'id': machine.id, 'command_id': command.id}) }}">{{ command.enabled ? 'Yes':'No' }}</a></td>
+            <td><a href="{{ path('rem_com',{'id': machine.id, 'command_id': command.id}) }}">{{ command.isrem ? 'Yes':'No' }}</a></td>
+            <td><a href="{{ path('do_out_com',{'id': machine.id, 'command_id': command.id}) }}">{{ command.doOut ? 'Yes':'No' }}</a></td>
+            <td class="text-right">
+                {% if command.urzadzenie.power == true or not command.isrem %}<a comm-id="{{ command.id }}" urz-id="{{ command.urzadzenie.id }}" sh-out="{{ command.doOut ? 'true' : 'false' }}" onclick="sendCommand(this)" class="btn btn-xs btn-primary">Run</a>{% endif %}
+                <a href="{{ path("edit_com",{'id':machine.id, 'command_id': command.id}) }}" class="btn btn-xs btn-default">Edit</a>
+                <a href="{{ path("del_com",{'id':machine.id, 'command_id': command.id}) }}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+</div>
+</div>
+{% endblock %}

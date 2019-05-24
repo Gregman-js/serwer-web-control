@@ -1,0 +1,17 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+
+{% block page_subtitle %}{% endblock %}
+{% block my_js %}
+{% endblock %}
+{% block page_title %}Add Server
+{% endblock %}
+{% block page_content %}
+<div class="box">
+
+<div class="box-body">
+  {{ form_start(form,{'render_rest': true}) }}
+  {{ form_widget(form) }}
+  {{ form_end(form) }}
+</div>
+</div>
+{% endblock %}

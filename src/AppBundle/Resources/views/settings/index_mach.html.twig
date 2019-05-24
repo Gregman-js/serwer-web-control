@@ -1,0 +1,42 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+
+{% block page_subtitle %}{% endblock %}
+{% block my_js %}
+  <script type="text/javascript" src="{{ asset('js/com/sendCom.js') }}"></script>
+{% endblock %}
+{% block page_title %}Server Settings
+  <div class="" style="float:right;">
+    <a href="{{ path('add_set_mach') }}" class="btn btn-primary">Add new Server</a>
+  </div>
+{% endblock %}
+{% block page_content %}
+<div class="box">
+
+<div class="box-body">
+    <table id="example2" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th style="width: 5px;"><i class="fas fa-sun"></i></th>
+            <th>Name</th>
+            <th>Ip address</th>
+            <th>Username</th>
+            <th>Opcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for machine in machines %}
+        <tr>
+            <td><i class="fas fa-circle {% if machine.power %}green{% else %}red{% endif %}"></i></td>
+            <td>{{ machine.name }}</td>
+            <td>{{ machine.ipaddress }}</td>
+            <td>{{ machine.username }}</td>
+            <td class="text-right">
+              <a href="{{ path("edit_set_mach",{'id':machine.id}) }}" class="btn btn-xs btn-default">Edit</a>
+              <a href="{{ path("del_set_mach",{'id':machine.id}) }}" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+</div>
+</div>
+{% endblock %}

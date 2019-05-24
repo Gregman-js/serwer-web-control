@@ -1,0 +1,208 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% block page_subtitle %}{% endblock %}
+{% block my_js %}
+  <script type="text/javascript" src="{{ asset('js/dev/script.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/com/sendCom.js') }}"></script>
+{% endblock %}
+{% block clockpicker %}
+  <link rel="stylesheet" href="{{ asset('assets/vendor/clockpicker/dist/bootstrap-clockpicker.css') }}">
+  <script type="text/javascript" src="{{ asset('assets/vendor/clockpicker/dist/bootstrap-clockpicker.js') }}"></script>
+{% endblock %}
+{% block page_title %}{{ machine.name }}
+  <div class="" style="float:right;">
+    {# {% if machine.power == false %}
+    <a href="{{ path('on_dev', {'id':machine.id}) }}" class="btn btn-danger">Uruchom</a>
+{% else %}
+<a href="{{ path('off_dev', {'id':machine.id}) }}" class="btn btn-success">Wyłącz</a>
+{% endif %} #}
+    <div class="out-c">
+      <div class="circle-shadow"></div>
+      <div class="circle {% if machine.power == false %}b-c-red{% else %}b-c-green{% endif %}" style="user-select:none;">
+        {% if machine.power == false %}OFF{% else %}ON{% endif %}
+      </div>
+      <div class="circle-out {% if machine.power == false %}b-c-green{% else %}b-c-red{% endif %}" style="user-select:none;">
+        {% if machine.power == false %}ON{% else %}OFF{% endif %}
+      </div>
+      <div class="circle-black"></div>
+    </div>
+  </div>
+{% endblock %}
+{% block page_content %}
+  {% for flash_message in app.session.flashBag.get('error') %}
+    <div class="alert alert-warning">
+      {{ flash_message }}
+    </div>
+  {% endfor %}
+  <script type="text/javascript">
+    id = {{ machine.id }};
+  </script>
+  <div id="grayer" style="filter: grayscale({% if machine.power == true %}0{% else %}1{% endif %});">
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user-2">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="widget-user-header bg-green" style="height: 102px;">
+            <div class="ikus">
+              <i class="fas fa-wind"></i>
+            </div>
+            <!-- /.widget-user-image -->
+            <h3 class="widget-user-username further">Fan speed</h3>
+            <h5 class="widget-user-desc further">RPM</h5>
+          </div>
+          <div class="box-footer no-padding">
+            <ul class="nav nav-stacked" id="fan-wykaz">
+              {% if raport.fan is defined %}
+                {% for fanek in raport.fan %}
+                  <li>
+                    <a href="#">{{ fanek[0] }}
+                      <span class="pull-right badge bg-aqua">
+                        {% if machine.power == true %}{{ fanek[1] }}
+                        {% else %}0{% endif %}</span></a>
+                  </li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="height: 245px;">
+        <div class="info-box bg-blue">
+          <span class="info-box-icon">
+            <i class="fas fa-memory" style="opacity: 0.3;"></i>
+          </span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Memory</span>
+            <span class="info-box-number">
+              <span id="mem-us">
+                {% if raport and machine.power == true %}{{ raport.ram.used }}
+                  MB{% else %}OFF{% endif %}
+              </span>
+              \
+              {% if raport.ram is defined %}{{ raport.ram.total }}
+              {% else %}1000{% endif %}
+              MB</span>
+
+            <div class="progress">
+              <div class="progress-bar" id="ram-proc-bar" style="width: {% if raport.ram is defined %}{{ raport.ram.procent }}{% else %}70{% endif %}%"></div>
+            </div>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <div class="small-box bg-blue">
+          <div class="inner">
+            <h3 style="font-size: 40px;">
+              <span id="ram-proc-big">
+                {% if raport.ram is defined %}{{ raport.ram.procent }}
+                {% else %}70{% endif %}
+              </span>
+              <sup style="font-size: 25px">%</sup>
+            </h3>
+
+            <p>Memory Av. Usage</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-memory"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user-2">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="widget-user-header bg-red">
+            <div class="ikus">
+              <i class="fas fa-fire"></i>
+            </div>
+            <!-- /.widget-user-image -->
+            <h3 class="widget-user-username">Temperature</h3>
+            <h5 class="widget-user-desc">°C</h5>
+          </div>
+          <div class="box-footer no-padding">
+            <ul class="nav nav-stacked" id="temp-wykaz">
+              {% if raport.temp is defined  %}
+                {% for temp in raport.temp %}
+                  <li>
+                    <a href="#">{{ temp[0] }}
+                      <span class="pull-right badge bg-navy">{{ temp[1] }}</span></a>
+                  </li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="height: 245px;">
+        <div class="small-box bg-yellow">
+          <div class="inner">
+            <h3 id="uptime-text">
+              {{ raport.uptime.text }}
+            </h3>
+
+            <p>Uptime</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-clock-o"></i>
+          </div>
+        </div>
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+          <div class="inner">
+            <div class="outer-div">
+              <div class="clock-width input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+                <input type="text" id="clock-inp" class="form-control" value="{{ "now"|date("H:i") }}">
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-time"></span>
+                </span>
+              </div>
+              <div class="btn-group clock-btn">
+              <button id="time-generator" type="button" class="btn btn-success">Aktywuj</button>
+                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+              </div>
+            </div>
+            <p>Shutdown</p>
+          </div>
+          <!-- <div class="icon">
+            <i class="fas fa-clock-o"></i>
+          </div> -->
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+        <div class="box box-success collapsed-box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Commands</h3>
+
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <!-- /.box-tools -->
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body" id="command-exp" style="display: none;">
+            {% for command in commands %}
+            <a class="command-list command-hrefs no-wrap" urz-id="{{ machine.id }}" comm-id="{{ command.id }}" sh-out="{{ command.doOut ? 'true' : 'false' }}"{% if machine.power == true %} onclick="sendCommand(this)"{% endif %} style="display: block; width: 100%; height: 100%;">
+              {{ command.name }} <span style="color: grey; font-size: 10px;">({{ command.command }})</span>
+            </a>
+            {% endfor %}
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <h1 style="font-size: 24px;">LOL</h1> -->
+
+{% endblock %}

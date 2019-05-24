@@ -1,0 +1,9 @@
+parameters:
+        my_admin_bundle.menu_listener.class: AppBundle\EventListener\MyMenuItemListListener
+
+services:
+        my_admin_bundle.menu_listener:
+            class: %my_admin_bundle.menu_listener.class%
+            arguments: ['@doctrine.orm.entity_manager']
+            tags:
+                - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
