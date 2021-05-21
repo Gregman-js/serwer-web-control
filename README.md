@@ -1,6 +1,8 @@
 Serwer web control
 ====
 
+## No longer maintained
+
 A Symfony project created on May 4, 2019, 10:34 pm.
 
 # Getting started
